@@ -31,7 +31,6 @@ from PyQt5.QtWidgets import (
 
 from camera_stream import CameraStream
 from controls_manager import ControlsManager
-from display_overlay import DisplayOverlay
 from motion_extractor import MotionExtractor
 
 
@@ -75,7 +74,6 @@ class MotionExtractorWorker(QObject):
 
         self._camera: Optional[CameraStream] = None
         self._extractor: Optional[MotionExtractor] = None
-        self._overlay: Optional[DisplayOverlay] = None
         self._controls: Optional[ControlsManager] = None
         self._running = False
         self._camera_name = ""
@@ -125,7 +123,6 @@ class MotionExtractorWorker(QObject):
                 fps=detected_fps,
                 initial_delay_frames=initial_delay_frames,
             )
-            self._overlay = DisplayOverlay()
 
             while self._running:
                 frame = self._camera.read_frame()
@@ -144,12 +141,8 @@ class MotionExtractorWorker(QObject):
                 if motion_frame is None:
                     continue
 
-                delay_text = self._controls.get_display_text()
-                display_frame = self._overlay.render_bottom_info(
-                    motion_frame, delay_text, self._camera_name
-                )
-
-                qt_image = self._convert_to_qimage(display_frame)
+                # No overlay - status bar shows all info
+                qt_image = self._convert_to_qimage(motion_frame)
                 self.frame_ready.emit(qt_image)
 
                 QThread.msleep(1)
@@ -222,7 +215,6 @@ class MotionExtractorWindow(QMainWindow):
         self._window_title = window_title
         self._camera_name = ""
         self._detected_fps = motion_settings.fps
-        self._status_prefix = ""
 
         self._video_label = QLabel("Starting camera...")
         self._video_label.setAlignment(Qt.AlignCenter)
@@ -301,7 +293,6 @@ class MotionExtractorWindow(QMainWindow):
         self._detected_fps = self._motion_settings.fps
         self._delay_spinbox.setMaximum(self._motion_settings.fps * 10)
         self._update_delay_seconds_label()
-        self._status_prefix = f"Camera FPS detected: {fps}"
         self._refresh_status_message()
 
     @pyqtSlot(int)
@@ -333,10 +324,10 @@ class MotionExtractorWindow(QMainWindow):
 
     @pyqtSlot(str)
     def _handle_status_message(self, message: str) -> None:
-        """Display worker status updates alongside camera metadata."""
+        """Display transient worker status messages."""
 
-        self._status_prefix = message
-        self._refresh_status_message()
+        # Show temporary status messages directly without mixing with persistent info
+        self._status_bar.showMessage(message, 3000)  # Clear after 3 seconds
 
     @pyqtSlot(str)
     def _update_camera_name(self, name: str) -> None:
@@ -346,15 +337,13 @@ class MotionExtractorWindow(QMainWindow):
         self._refresh_status_message()
 
     def _refresh_status_message(self) -> None:
-        """Compose the status bar message with prefix, camera name, and FPS."""
+        """Compose the status bar message with camera name and detected FPS."""
 
         parts = []
-        if self._status_prefix:
-            parts.append(self._status_prefix)
         if self._camera_name:
             parts.append(f"Camera: {self._camera_name}")
         if self._detected_fps:
-            parts.append(f"FPS: {self._detected_fps}")
+            parts.append(f"{self._detected_fps} FPS detected")
 
         if parts:
             self._status_bar.showMessage("  |  ".join(parts))

@@ -30,7 +30,6 @@ from PyQt5.QtWidgets import (
 )
 
 from camera_stream import CameraStream
-from controls_manager import ControlsManager
 from motion_extractor import MotionExtractor
 
 
@@ -65,16 +64,13 @@ class MotionExtractorWorker(QObject):
         self,
         camera_settings: CameraSettings,
         motion_settings: MotionSettings,
-        window_title: str,
     ) -> None:
         super().__init__()
         self._camera_settings = camera_settings
         self._motion_settings = motion_settings
-        self._window_title = window_title
 
         self._camera: Optional[CameraStream] = None
         self._extractor: Optional[MotionExtractor] = None
-        self._controls: Optional[ControlsManager] = None
         self._running = False
         self._camera_name = ""
         self._fps = motion_settings.fps
@@ -119,10 +115,6 @@ class MotionExtractorWorker(QObject):
                 fps=detected_fps,
                 blend_alpha=self._motion_settings.blend_alpha,
             )
-            self._controls = ControlsManager(
-                fps=detected_fps,
-                initial_delay_frames=initial_delay_frames,
-            )
 
             while self._running:
                 frame = self._camera.read_frame()
@@ -158,11 +150,10 @@ class MotionExtractorWorker(QObject):
     def set_delay_frames(self, frames: int) -> None:
         """Update the delay setting from the UI spinbox."""
 
-        if not self._extractor or not self._controls:
+        if not self._extractor:
             return
 
-        self._controls.set_delay_frames(frames)
-        self._extractor.update_delay_frames(self._controls.delay_frames)
+        self._extractor.update_delay_frames(frames)
 
     @pyqtSlot()
     def stop(self) -> None:
@@ -246,7 +237,7 @@ class MotionExtractorWindow(QMainWindow):
         self.setStatusBar(self._status_bar)
 
         self._thread = QThread(self)
-        self._worker = MotionExtractorWorker(camera_settings, motion_settings, window_title)
+        self._worker = MotionExtractorWorker(camera_settings, motion_settings)
         self._worker.moveToThread(self._thread)
 
         self._thread.started.connect(self._worker.run)

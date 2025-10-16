@@ -1,0 +1,17 @@
+{
+  "motion": {
+    "delay_frames": 5,
+    "delay_seconds": null,
+    "blend_alpha": 0.5,
+    "fps": 30
+  },
+  "camera": {
+    "source": 0,
+    "width": 640,
+    "height": 480
+  },
+  "display": {
+    "show_preview": true,
+    "window_name": "Motion Extraction"
+  }
+}

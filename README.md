@@ -6,8 +6,8 @@ Real-time motion extraction from live camera streams using OpenCV - isolates mov
 
 ```bash
 # 1. Clone and navigate
-git clone <your-repo-url>
-cd extractor-wip
+git clone https://github.com/daliudzius/motion-extractor.git
+cd motion-extractor
 
 # 2. Set up environment
 python -m venv .venv

@@ -7,7 +7,9 @@ This PR refactors the motion extraction application from OpenCV-based GUI to PyQ
 
 ### 1. Unnecessary Code Removed ✅
 - **Empty placeholder files**: Removed `gui_window.py`, `pysimplegui_window.py`, and `tkinter_window.py` (all were empty)
-- **Unused imports**: Removed `typing.List` and `typing.Tuple` that were imported but never used
+- **Unused imports**: 
+  - Removed `typing.List` from `display_overlay.py` (imported but never used)
+  - Removed `typing.Tuple` from `motion_extractor.py` (imported but never used)
 
 ### 2. Code Quality Improvements ✅
 - **Whitespace cleanup**: Applied `black` formatter to fix 200+ whitespace issues (trailing whitespace, blank lines with whitespace)

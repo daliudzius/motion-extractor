@@ -2,6 +2,8 @@
 
 Real-time motion extraction from live camera streams using OpenCV - isolates moving objects by removing static background elements through frame differencing.
 
+![Motion Extractor in Action](assets/demo-screenshot.png)
+
 ## Quick Start
 
 ```bash

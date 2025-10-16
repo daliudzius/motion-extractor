@@ -2,7 +2,6 @@
 Unit tests for CameraStream class.
 """
 
-import pytest
 from src.camera_stream import CameraStream
 
 

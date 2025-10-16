@@ -2,7 +2,6 @@
 Unit tests for MotionExtractor dynamic delay updates.
 """
 
-import pytest
 import numpy as np
 from src.motion_extractor import MotionExtractor
 

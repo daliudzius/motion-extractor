@@ -2,7 +2,6 @@
 Unit tests for ControlsManager class (GUI-based controls).
 """
 
-import pytest
 from src.controls_manager import ControlsManager
 
 

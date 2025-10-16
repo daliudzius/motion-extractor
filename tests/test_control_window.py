@@ -2,8 +2,6 @@
 Tests for ControlWindow class.
 """
 
-import pytest
-import cv2
 from src.control_window import ControlWindow
 
 

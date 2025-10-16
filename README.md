@@ -18,22 +18,24 @@ source .venv/bin/activate  # Windows: .venv\Scripts\activate
 # 3. Install dependencies
 pip install -r requirements.txt
 
-# 4. Run
-python src/main.py
+# 4. Run the PyQt window
+python src/qt_main.py
 ```
 
 ## Controls
 
-- **Up/Down Arrow** - Adjust delay (1-300 frames)
-- **Q** - Quit
+- **Delay Spinbox** – Click to type a value or drag arrows to adjust frame delay (0-10 seconds)
+- **Mouse Scroll / Arrow Keys** – Fine-tune delay when the spinbox is focused
+- **Esc / Ctrl+Q** – Quit the application
 
-Two windows open: Motion output + Control panel showing current delay.
+The application opens a single window that combines the video preview and controls.
 
 ## Features
 
 - Live camera processing with adjustable delay (0-10 seconds)
 - Real-time motion visualization through frame blending
-- On-screen overlay with delay info and camera name
+- On-screen overlay with live delay info
+- Status bar with camera name and detected FPS
 - Configurable via `config/settings.json`
 
 ## How It Works

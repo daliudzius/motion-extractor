@@ -11,6 +11,7 @@ requires-python = ">=3.8"
 dependencies = [
     "opencv-python>=4.8.0",
     "numpy>=1.24.0",
+    "PyQt5>=5.15.10",
 ]
 
 [tool.black]

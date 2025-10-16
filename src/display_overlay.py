@@ -80,12 +80,11 @@ class DisplayOverlay:
         
         Layout:
         - Bottom-left: Current delay information
-        - Bottom-center-left: Camera device name
-        
+
         Args:
             frame (np.ndarray): Input frame
             delay_text (str): Current delay information
-            camera_name (str): Camera device name (shortened)
+            camera_name (str): Unused parameter kept for backward compatibility
         
         Returns:
             np.ndarray: Frame with overlay rendered
@@ -95,18 +94,12 @@ class DisplayOverlay:
         
         height = frame.shape[0]
         
-        # Bottom-left: Delay info
+    # Camera name overlay intentionally removed; UI now shows it via status bar.
+
+    # Bottom-left: Delay info
         delay_y = height - 15
         self.add_text_with_background(
             display_frame, delay_text, (10, delay_y), self.highlight_color
         )
-        
-        # Bottom-center-left: Camera name (if provided)
-        if camera_name:
-            camera_x = 250  # Position to the right of delay info
-            camera_text = f"Camera: {camera_name}"
-            self.add_text_with_background(
-                display_frame, camera_text, (camera_x, delay_y), self.text_color
-            )
         
         return display_frame
